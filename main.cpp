@@ -29,7 +29,7 @@ int main( void )
             break;
         }
         int c = waitKey(10);
-        imshow( window_name, frame );
+        detectAndDisplay(frame);
         if( (char)c == 27 )
         {
             break;
@@ -37,7 +37,7 @@ int main( void )
     }
     return 0;
 }
-int pos[10][2]; // 1st - faces number, 2nd - coordinates
+int pos[30][2]; // 1st - faces number, 2nd - coordinates
 
 void detectAndDisplay( Mat frame )
 {
@@ -46,15 +46,20 @@ void detectAndDisplay( Mat frame )
     cvtColor(frame, frame_gray, COLOR_BGR2GRAY);
     equalizeHist(frame_gray, frame_gray);
     face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(70, 70) );
-    for( size_t i = 0; i < faces.size(); i++ )
-    {
-        Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
-        ellipse( frame, center, Size( faces[i].width/2, faces[i].height/2), 0, 0, 360, Scalar( 0, 13, 26), 4, 8, 0 );
+    for( int i = 0; i < faces.size(); i++ )
+	{
+		Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
+		ellipse( frame, center, Size( faces[i].width/2, faces[i].height/2), 0, 0, 360, Scalar( 0, 13, 26), 4, 8, 0 );
+		circle(frame,center,1,Scalar( 0, 13, 26 ), 4, 8, 0);
 		Mat faceROI = frame_gray( faces[i] );
-		pos[i][0] = faces[i].x + faces[i].width/2;
-        pos[i][1] = faces[i].y + faces[i].height/2;
 		std::vector<Rect> eyes;
-    }
+
+		Point before(2*(faces[i].x + faces[i].width/2) - pos[i][0], 2*(faces[i].y + faces[i].height/2) - pos[i][1]);
+		line(frame, before, center, Scalar(0, 13, 26), 4, 8, 0);
+		pos[i][0] = faces[i].x + faces[i].width/2;
+		pos[i][1] = faces[i].y + faces[i].height/2;
+		std::cout« "Face index" « i « ": x-" « faces[i].x + faces[i].width/2 « ", y-" « faces[i].y + faces[i].height/2 « endl;
+	}
     std::cout« "Face index" « i « ": x-" « faces[i].x + faces[i].width/2 « ", y-" « faces[i].y + faces[i].height/2 « endl;
     imshow( window_name, frame );
 }
