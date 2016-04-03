@@ -37,6 +37,7 @@ int main( void )
     }
     return 0;
 }
+int pos[10][2]; // 1st - faces number, 2nd - coordinates
 
 void detectAndDisplay( Mat frame )
 {
@@ -50,6 +51,8 @@ void detectAndDisplay( Mat frame )
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
         ellipse( frame, center, Size( faces[i].width/2, faces[i].height/2), 0, 0, 360, Scalar( 0, 13, 26), 4, 8, 0 );
 		Mat faceROI = frame_gray( faces[i] );
+		pos[i][0] = faces[i].x + faces[i].width/2;
+        pos[i][1] = faces[i].y + faces[i].height/2;
 		std::vector<Rect> eyes;
     }
     std::cout« "Face index" « i « ": x-" « faces[i].x + faces[i].width/2 « ", y-" « faces[i].y + faces[i].height/2 « endl;
