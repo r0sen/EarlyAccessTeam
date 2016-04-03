@@ -10,6 +10,7 @@ using namespace cv;
 
 String window_name = "Capture - Face detection";
 
+void detectAndDisplay( Mat frame );
 
 int main( void )
 {
@@ -37,5 +38,20 @@ int main( void )
         }
     }
     return 0;
+}
+
+void detectAndDisplay( Mat frame )
+{
+    std::vector<Rect> faces;
+    Mat frame_gray;
+    cvtColor( frame, frame_gray, COLOR_BGR2GRAY );
+    equalizeHist( frame_gray, frame_gray );
+    face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(70, 70) );
+    for( size_t i = 0; i < faces.size(); i++ )
+    {
+        Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
+        ellipse( frame, center, Size( faces[i].width/2, faces[i].height/2), 0, 0, 360, Scalar( 0, 13, 26), 4, 8, 0 );
+    }
+    imshow( window_name, frame );
 }
 
