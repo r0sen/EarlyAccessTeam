@@ -13,6 +13,7 @@ String window_name = "Capture - Face detection";
 
 int main( void )
 {
+	// for updating
     VideoCapture capture;
     capture.open(0);
     Mat frame;
