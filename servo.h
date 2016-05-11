@@ -46,3 +46,20 @@ break;
 Servo::refresh();
 
 }
+
+
+
+int InputHand;
+void turnByHand()
+{
+if (InputHand == 3)
+{
+servoHorizontal.write(servoHorizontal_pos++);
+delay(100);
+}
+if (InputHand == 4)
+{
+servoHorizontal.write(servoHorizontal_pos--);
+delay(100);
+}
+}
