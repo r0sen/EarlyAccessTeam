@@ -33,8 +33,9 @@ int command;
 
 int main( void )
 {
-    char choise;
     done = false;
+    mode = false;
+
     SP = new Serial("\\\\.\\COM8");
     if (SP->IsConnected())
         printf("Connected");
@@ -42,15 +43,6 @@ int main( void )
     SP->WriteData(buffer, 1);
     command = 0;
     Sleep(500);
-
-    printf("\nChoose mode:\n\t1 - Face follow;\n\t2 - Keyboard;\n\t>>");
-    choise = getchar();
-    if(choise == '1')
-        mode = false;
-    else if(choise == '2')
-        mode = true;
-    else
-        mode = false;
 
     //
     VideoCapture capture;
@@ -96,7 +88,7 @@ int pos[10][2]; // 1st - faces number, 2nd - coordinates
 void detectAndDisplay( Mat frame )
 {
 
-    char direction;
+    char direction, selectMode;
 
     std::vector<Rect> faces;
     Mat frame_gray;
@@ -122,6 +114,14 @@ void detectAndDisplay( Mat frame )
         pos[i][1] = faces[i].y + faces[i].height/2;
         std::cout<< " FacesNumber: " << faces.size() << ",  Face index" << i << ": x-" << faces[i].x + faces[i].width/2 << ", y-" << faces[i].y + faces[i].height/2<< endl;
     }
+
+    if(kbhit()){
+        selectMode = getch();
+
+        if(selectMode == 'b')
+            mode = !mode;
+    }
+
 
     if(!mode)
     {
