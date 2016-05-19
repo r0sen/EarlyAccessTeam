@@ -118,8 +118,9 @@ void detectAndDisplay( Mat frame )
     if(kbhit()){
         selectMode = getch();
 
-        if(selectMode == 'b')
+        if(selectMode == 'b'){
             mode = !mode;
+		}
     }
 
 
