@@ -39,7 +39,7 @@ void turnUp()
 {
   if (servoVertical_pos > 0)
   {
-    servoVertical.write(servoVertical_pos--);
+    servoVertical.write(servoVertical_pos++);
     delay(150);
   }
 }
@@ -48,7 +48,7 @@ void turnDown()
 {
   if (servoVertical_pos < 180)
   {
-    servoVertical.write(servoVertical_pos++);
+    servoVertical.write(servoVertical_pos--);
     delay(150);
   }
 }
