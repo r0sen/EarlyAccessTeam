@@ -21,29 +21,34 @@ String eyes_cascade_name = "haarcascade_eye_tree_eyeglasses.xml";
 CascadeClassifier face_cascade;
 CascadeClassifier eyes_cascade;
 
-String window_name = "Spy Cam! Behrang - sexy gay";
+String window_name = "Your mothers are waiting for us :*";
 
 Serial* SP;
 char* buffer;
 
 bool done;
+bool mode;
 int command;
 
 
 int main( void )
 {
     done = false;
+    mode = false;
+
     SP = new Serial("\\\\.\\COM8");
     if (SP->IsConnected())
-		printf("Connected");
+        printf("Connected");
     buffer="0";
     SP->WriteData(buffer, 1);
     command = 0;
     Sleep(500);
+
     //
     VideoCapture capture;
     capture.open(0);
     Mat frame;
+
     if( !face_cascade.load( face_cascade_name ) )
     {
         printf("--(!)Error loading face cascade\n");
@@ -82,6 +87,9 @@ int pos[10][2]; // 1st - faces number, 2nd - coordinates
 
 void detectAndDisplay( Mat frame )
 {
+
+    char direction, selectMode;
+
     std::vector<Rect> faces;
     Mat frame_gray;
     cvtColor( frame, frame_gray, COLOR_BGR2GRAY );
@@ -107,83 +115,125 @@ void detectAndDisplay( Mat frame )
         std::cout<< " FacesNumber: " << faces.size() << ",  Face index" << i << ": x-" << faces[i].x + faces[i].width/2 << ", y-" << faces[i].y + faces[i].height/2<< endl;
     }
 
-    if ((faces.size() == 0 ) && (command!=0)) // if we lost him. call his mom to help her take it easier
+    if(kbhit())
     {
-        buffer= "0";
-        command = 0;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
+        selectMode = getch();
 
-    if ((faces.size()!=0) && (pos[0][0] < RIGHT_BORDER) && (command!=3) && (pos[0][1] > TOP_BORDER) && (pos[0][1] < BOTTOM_BORDER))
-    {
-        buffer= "3";
-        command = 3;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
-    else if ((faces.size()!=0) && (pos[0][0] > LEFT_BORDER) && (command != 4)&& (pos[0][1] > TOP_BORDER) && (pos[0][1] < BOTTOM_BORDER))
-    {
-        buffer= "4";
-        command = 4;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
-    else if ((faces.size()!=0) && (pos[0][0] <= LEFT_BORDER) && (pos[0][0] >= RIGHT_BORDER) && (command!=0)&& (pos[0][1] > TOP_BORDER) && (pos[0][1] < BOTTOM_BORDER))
-    {
-        buffer= "0";
-        command = 0;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
-    // next
-    else if ((faces.size()!=0) && (pos[0][0] <= LEFT_BORDER) && (pos[0][0] >= RIGHT_BORDER) && (command!=1)&& (pos[0][1] < TOP_BORDER))
-    {
-        buffer= "1";
-        command = 1;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
-    else if ((faces.size()!=0) && (pos[0][0] <= LEFT_BORDER) && (pos[0][0] >= RIGHT_BORDER) && (command!=2)&& (pos[0][1] > BOTTOM_BORDER))
-    {
-        buffer= "2";
-        command = 2;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
-    else if ((faces.size() != 0) && (pos[0][0] > LEFT_BORDER)  && (command!=8)&& (pos[0][1] > BOTTOM_BORDER))
-    {
-        buffer= "8";
-        command = 8;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
-    else if ((faces.size() != 0) && (pos[0][0] < RIGHT_BORDER)  && (command!=6)&& (pos[0][1] > BOTTOM_BORDER))
-    {
-        buffer= "6";
-        command = 6;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }//
-    else if ((faces.size() != 0) && (pos[0][0] > LEFT_BORDER)  && (command!=7)&& (pos[0][1] < TOP_BORDER))
-    {
-        buffer= "7";
-        command = 7;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
-    }
-    else if ((faces.size() != 0) && (pos[0][0] < RIGHT_BORDER)  && (command!=5)&& (pos[0][1]  < TOP_BORDER))
-    {
-        buffer= "5";
-        command = 5;
-        SP->WriteData(buffer, 1);
-        Sleep(500);
+        if(selectMode == 'b')
+            mode = !mode;
     }
 
 
+    if(!mode)
+    {
+        if ((faces.size() == 0 ) && (command!=0)) // if we lost him. call his mom to help her take it easier
+        {
+            buffer= "0";
+            command = 0;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
 
-
-
+        if ((faces.size()!=0) && (pos[0][0] < RIGHT_BORDER) && (command!=3) && (pos[0][1] > TOP_BORDER) && (pos[0][1] < BOTTOM_BORDER))
+        {
+            buffer= "3";
+            command = 3;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+        else if ((faces.size()!=0) && (pos[0][0] > LEFT_BORDER) && (command != 4)&& (pos[0][1] > TOP_BORDER) && (pos[0][1] < BOTTOM_BORDER))
+        {
+            buffer= "4";
+            command = 4;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+        else if ((faces.size()!=0) && (pos[0][0] <= LEFT_BORDER) && (pos[0][0] >= RIGHT_BORDER) && (command!=0)&& (pos[0][1] > TOP_BORDER) && (pos[0][1] < BOTTOM_BORDER))
+        {
+            buffer= "0";
+            command = 0;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+        // next
+        else if ((faces.size()!=0) && (pos[0][0] <= LEFT_BORDER) && (pos[0][0] >= RIGHT_BORDER) && (command!=1)&& (pos[0][1] < TOP_BORDER))
+        {
+            buffer= "1";
+            command = 1;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+        else if ((faces.size()!=0) && (pos[0][0] <= LEFT_BORDER) && (pos[0][0] >= RIGHT_BORDER) && (command!=2)&& (pos[0][1] > BOTTOM_BORDER))
+        {
+            buffer= "2";
+            command = 2;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+        else if ((faces.size() != 0) && (pos[0][0] > LEFT_BORDER)  && (command!=8)&& (pos[0][1] > BOTTOM_BORDER))
+        {
+            buffer= "8";
+            command = 8;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+        else if ((faces.size() != 0) && (pos[0][0] < RIGHT_BORDER)  && (command!=6)&& (pos[0][1] > BOTTOM_BORDER))
+        {
+            buffer= "6";
+            command = 6;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }//
+        else if ((faces.size() != 0) && (pos[0][0] > LEFT_BORDER)  && (command!=7)&& (pos[0][1] < TOP_BORDER))
+        {
+            buffer= "7";
+            command = 7;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+        else if ((faces.size() != 0) && (pos[0][0] < RIGHT_BORDER)  && (command!=5)&& (pos[0][1]  < TOP_BORDER))
+        {
+            buffer= "5";
+            command = 5;
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+        }
+    }
+    else if(mode)
+    {
+        if(kbhit())
+        {
+            direction = getch();
+            if(direction == 'd')
+            {
+                buffer= "3";
+                command = 3;
+                SP->WriteData(buffer, 1);
+                Sleep(500);
+            }
+            else if(direction == 'a')
+            {
+                buffer= "4";
+                command = 4;
+                SP->WriteData(buffer, 1);
+                Sleep(500);
+            }
+            else if(direction == 'w')
+            {
+                buffer= "1";
+                command = 1;
+                SP->WriteData(buffer, 1);
+                Sleep(500);
+            }
+            else if(direction == 's')
+            {
+                buffer= "2";
+                command = 2;
+                SP->WriteData(buffer, 1);
+                Sleep(500);
+            }
+        }
+    }
 
     imshow( window_name, frame );
 }
