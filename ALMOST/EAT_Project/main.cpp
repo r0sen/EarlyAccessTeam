@@ -225,32 +225,28 @@ void detectAndDisplay( Mat frame )
             if(direction == 'a')
             {
                 buffer= "3";
-                putchar(direction);
-                command = 3;
+                //command = 3;
                 SP->WriteData(buffer, 1);
                 Sleep(1000);
             }
             else if(direction == 'd')
             {
                 buffer= "4";
-                putchar(direction);
-                command = 4;
+                //command = 4;
                 SP->WriteData(buffer, 1);
                 Sleep(1000);
             }
             else if(direction == 'w')
             {
                 buffer= "1";
-                putchar(direction);
-                command = 1;
+                //command = 1;
                 SP->WriteData(buffer, 1);
                 Sleep(1000);
             }
             else if(direction == 's')
             {
                 buffer= "2";
-                putchar(direction);
-                command = 2;
+                //command = 2;
                 SP->WriteData(buffer, 1);
                 Sleep(1000);
             }
