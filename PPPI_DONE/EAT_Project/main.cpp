@@ -115,12 +115,12 @@ void detectAndDisplay( Mat frame )
         std::cout<< " FacesNumber: " << faces.size() << ",  Face index" << i << ": x-" << faces[i].x + faces[i].width/2 << ", y-" << faces[i].y + faces[i].height/2<< endl;
     }
 
-    if(kbhit()){
+    if(kbhit())
+    {
         selectMode = getch();
 
-        if(selectMode == 'b'){
+        if(selectMode == 'b')
             mode = !mode;
-		}
     }
 
 
