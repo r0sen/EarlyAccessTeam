@@ -33,13 +33,14 @@ int command;
 
 int main( void )
 {
+    char choose;
     done = false;
     mode = true;
 
     SP = new Serial("\\\\.\\COM8");
     if (SP->IsConnected())
         printf("Connected");
-    buffer="i";
+    buffer="0";
     SP->WriteData(buffer, 1);
     command = 0;
     Sleep(500);
@@ -104,6 +105,11 @@ void detectAndDisplay( Mat frame )
 
     face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(250, 250) );
 
+    if (mode == true)
+        putText(frame, "Blowjob. Change mode: C", cvPoint(30,30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, CV_AA);
+    else
+        putText(frame, "Use zdelaut' za uas. Change mode: C", cvPoint(30,30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200,200,250), 1, CV_AA);
+
     for( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
@@ -116,30 +122,69 @@ void detectAndDisplay( Mat frame )
         line(frame, before, center, Scalar(0, 13, 26), 4, 8, 0);
         pos[i][0] = faces[i].x + faces[i].width/2;
         pos[i][1] = faces[i].y + faces[i].height/2;
-        //std::cout<< " FacesNumber: " << faces.size() << ",  Face index" << i << ": x-" << faces[i].x + faces[i].width/2 << ", y-" << faces[i].y + faces[i].height/2<< endl;
-
-        if(faces.size() <= 1){
+        if(faces.size() == 1)
+        {
             buffer="i";//green LED
             SP->WriteData(buffer, 1);
             Sleep(500);
         }
-        else{
+        else if(faces.size() > 1)
+        {
             buffer="o";//red LED
             SP->WriteData(buffer, 1);
             Sleep(500);
         }
+        else
+        {
+            buffer = "p";
+            SP->WriteData(buffer, 1);
+            Sleep(200);
+        }
     }
 
-   /* if(kbhit())
-    {
-        selectMode = getch();
+    if(kbhit())
+     {
+         direction = getch();
 
-        if(selectMode == 'e'){
-            mode = !mode;
-            putchar(selectMode);
-        }else
-        continue;
-    }*/
+         if(direction == 'c')
+             mode = !mode;
+
+             if(mode)
+             {
+            if(direction == 'a')
+            {
+                buffer= "3";
+                //command = 3;
+                SP->WriteData(buffer, 1);
+                Sleep(1000);
+            }else
+            if(direction == 'd')
+            {
+                buffer= "4";
+                //command = 4;
+                SP->WriteData(buffer, 1);
+                Sleep(1000);
+            }else
+            if(direction == 'w')
+            {
+                buffer= "1";
+                //command = 1;
+                SP->WriteData(buffer, 1);
+                Sleep(1000);
+            }else
+            if(direction == 's')
+            {
+                buffer= "2";
+                //command = 2;
+                SP->WriteData(buffer, 1);
+                Sleep(1000);
+            }
+
+            buffer = "0";
+            SP->WriteData(buffer, 1);
+            Sleep(500);
+            }
+     }
 
 
     if(!mode)
@@ -217,50 +262,9 @@ void detectAndDisplay( Mat frame )
             Sleep(500);
         }
     }
-    else if(mode)
-    {
-        if(kbhit())
-        {
-            direction = getch();
-            if(direction == 'a')
-            {
-                buffer= "3";
-                putchar(direction);
-                command = 3;
-                SP->WriteData(buffer, 1);
-                Sleep(1000);
-            }
-            else if(direction == 'd')
-            {
-                buffer= "4";
-                putchar(direction);
-                command = 4;
-                SP->WriteData(buffer, 1);
-                Sleep(1000);
-            }
-            else if(direction == 'w')
-            {
-                buffer= "1";
-                putchar(direction);
-                command = 1;
-                SP->WriteData(buffer, 1);
-                Sleep(1000);
-            }
-            else if(direction == 's')
-            {
-                buffer= "2";
-                putchar(direction);
-                command = 2;
-                SP->WriteData(buffer, 1);
-                Sleep(1000);
-            }
-            buffer = "0";
-            SP->WriteData(buffer, 1);
-            Sleep(500);
-        }
-    }
+        imshow( window_name, frame);
 
-    imshow( window_name, frame);
+
+
 }
-
 
